@@ -1,15 +1,31 @@
 import time
 
+print("""
+ /$$       /$$                                     /$$               /$$ /$$          
+|__/      | $$                                    | $$              | $$|__/          
+ /$$  /$$$$$$$  /$$$$$$$  /$$$$$$   /$$$$$$   /$$$$$$$          /$$$$$$$ /$$  /$$$$$$$
+| $$ /$$__  $$ /$$_____/ |____  $$ /$$__  $$ /$$__  $$         /$$__  $$| $$ /$$_____/
+| $$| $$  | $$| $$        /$$$$$$$| $$  \__/| $$  | $$        | $$  | $$| $$| $$      
+| $$| $$  | $$| $$       /$$__  $$| $$      | $$  | $$        | $$  | $$| $$| $$      
+| $$|  $$$$$$$|  $$$$$$$|  $$$$$$$| $$      |  $$$$$$$        |  $$$$$$$| $$|  $$$$$$$
+|__/ \_______/ \_______/ \_______/|__/       \_______/ /$$$$$$ \_______/|__/ \_______/
+                                                      |______/                        
+""")
 print("\n\033[1;40m用途:生成中国大陆身份证字典,本工具免费/开源,无网络连接\033[0m\n"
+      
       "\033[1;41m注意:\n\
 本工具仅用于信息安全研究、防御测试及经授权的安全评估场景，例如弱口令检测、安全意识教育与密码强度提升等合法用途。\n\
 使用者在使用本工具前，应确保已获得相关系统或数据所有者的明确授权，并严格遵守所在地法律法规及相关政策。禁止将本工具用于任何形式的未授权访问、密码破解、数据窃取、钓鱼攻击或其他违法违规行为。\n\
 本工具生成的内容仅用于安全测试与研究参考，不代表任何实际攻击建议或行为指导。因使用本工具或其生成内容而导致的任何直接或间接后果（包括但不限于账户泄露、系统入侵、法律责任等），均由使用者自行承担，与本工具作者无关。\n\
 本工具按“现状”提供，不对其生成结果的准确性、完整性或适用性作出任何保证。作者不对因使用或依赖本工具所造成的任何损失承担责任。\n\
-本工具仅供合法的安全测试、教育研究使用。\n\
-严禁用于任何未经授权的攻击、破解或违法行为！\n\
+本工具仅供合法的安全测试、教育研究使用。严禁用于任何未经授权的攻击、破解或违法行为！\n\
 一切使用后果由使用者自行承担，作者不承担任何法律责任。\n\
-继续使用即视为同意本声明。\033[0m"
+继续使用即视为同意本声明。\n\n\
+《中华人民共和国刑法》http://www.npc.gov.cn/zgrdw/npc/lfzt/rlys/2008-08/21/content_1882895.htm\n\
+《中华人民共和国个人信息保护法》http://www.npc.gov.cn/npc/c2/c30834/202108/t20210820_313088.html\n\
+《中华人民共和国数据安全法》http://www.npc.gov.cn/c2/c30834/202106/t20210610_311888.html\n\
+《中华人民共和国网络安全法》https://www.cac.gov.cn/2025-12/29/c_1768735112911946.htm\n\
+\033[0m"
       "\n\033[1;44mMadeBy:https://github.com/MCzhao2006\033[0m\n")
 output_file = str(input("请输入生成路径与文件名(如C:/Users/ASUS/Desktop/savefile.txt):"))
 ran = int(time.time())    # 使用时间戳,防止重名文件覆盖
@@ -26,7 +42,7 @@ while not 3 >= bl >= 1:
 begin = "1"          # 设定空变量，为while做好准备
 birth = "1"
 genderstr = ""
-divisor = ""
+divisor = False
 last = "1"
 start = 0
 end = 0
@@ -59,10 +75,10 @@ if bl == 1:
                 continue
         while True:
             genderstr = input("请输入性别(如男):")
-            if genderstr == '男':  # 男性余数
+            if genderstr == '男' or genderstr == 'nan':  # 男性余数
                 divisor = 1
                 break
-            elif genderstr == '女':  # 女性余数
+            elif genderstr == '女' or genderstr == 'nv':  # 女性余数
                 divisor = 0
                 break
             else:
@@ -85,9 +101,9 @@ elif bl == 2:
         while True:
             last = input('请输入身份证后四位:')
             if len(last) != 4 or \
-                ((not last[:-1].isdigit()) or \
-                 (not last[3] == 'X' and last[3] == 'x' and last[3].isdigit())):
-                # 初始4位判断    # 前三位不是数字||(最后一位不是X或x或数字)
+                    not (last[0].isdigit() and last[1].isdigit() and last[2].isdigit()) or \
+                    not (last[3].isdigit() or last[3] == 'X' or last[3] == 'x'):
+                # 初始4位判断   # 前三位必须是数字  # 最后一位是X或x或数字
                 continue
             break
         while not 2500 >= start >= 1850:
@@ -121,13 +137,13 @@ elif bl == 2:
 elif bl == 3:
     with open(output_file, 'w') as f:
         while not 2500 >= int(year) >= 1850:
-            year = input("您至少给/猜一个出生年份:")   # 最现实的最有效缓和字典大小条件
-            if (not year.isdigit()) or year == '':
+            year = input("您至少给/猜一个出生年份:")   # 最现实的最有效的最直白最不绕弯子的缓和字典大小条件
+            if (not year.isdigit()) or year == '':  # 年份值防
                 year = '0'
                 continue
         last8 = 8*['?']                        # 后续一对一填值初始值
         while True:
-            if 57 >= ord(last8[1]) >= 50 and last8[0] == '?':
+            if 57 >= ord(last8[1]) >= 51:       # 第二位月份3-9,第一位直接上0
                 last8[0] = '0'
             print(f"你目前的后八位:")
             for x in range(0, 8):              # 循环吐值
@@ -140,7 +156,7 @@ elif bl == 3:
                     continue
                 if 0 <= q <= 8:     # 规范值域
                     break
-            if q == 0:              # 跳出验证
+            if q == 0:              # 结束输入,跳出后续步骤
                 break
             try:
                 value = ord(input("输入这一位的值:"))       # 位:值一对一
@@ -148,13 +164,17 @@ elif bl == 3:
                     continue
             except TypeError:
                 continue
-            if (q == 1 and (value != 49 and value != 48)) or (q == 2 and not 57 >= value >= 48):
+            if value == 63:
+                last8[q-1] = chr(value)
+                print(f'\033[34m[INFO]:第{q}位的值已归位\033[0m\n')
+                continue
+            elif (q == 1 and (value != 49 and value != 48)) or (q == 2 and not (57 >= value >= 48)):
                 print("\033[31m[ERROR]:月份不合法\033[0m\n")                    # 月份值校验
                 continue
-            elif (q == 3 and not 51 >= value >= 48) or (q == 4 and not 57 >= value >= 48):
+            elif (q == 3 and not (51 >= value >= 48)) or (q == 4 and not (57 >= value >= 48)):
                 print("\033[31m[ERROR]:日期不合法\033[0m\n")                    # 日期值校验
                 continue
-            elif 7 >= q >= 4 and not 57 >= value >= 48:
+            elif 7 >= q >= 4 and not (57 >= value >= 48):
                 print("\033[31m[ERROR]:值不合法\033[0m\n")
                 continue
             elif q == 8 and not (57 >= value >= 48 or value == 88 or value == 120):
@@ -175,32 +195,32 @@ elif bl == 3:
             if month < 10:
                 month = f"0{month}"
             month = list(str(month))
-            if last8[0] != '?':  # 自定义位:值强改
+            if last8[0] != '?':     # 自定义位:值强改
                 month[0] = last8[0]
-            if last8[1] != '?':
+            if last8[1] != '?':     # 自定义位:值强改
                 month[1] = last8[1]
             for date in range(1, 32):
                 if date < 10:
                     date = f"0{date}"
                 date = list(str(date))
-                if last8[2] != '?':
+                if last8[2] != '?':     # 自定义位:值强改
                     date[0] = last8[2]
-                if last8[3] != '?':
+                if last8[3] != '?':     # 自定义位:值强改
                     date[1] = last8[3]
-                if month[1] == '2' and date[0] == '3':      # 二月跳
+                if month[0] == '0' and month[1] == '2' and date[0] == '3':      # 二月跳
                     continue
                 for x in range(0, 10):
-                    if last8[4] != '?':
+                    if last8[4] != '?':     # 自定义位:值强改
                         x = last8[4]
                     for y in range(0, 10):
-                        if last8[5] != '?':
+                        if last8[5] != '?': # 自定义位:值强改
                             y = last8[5]
                         for gender in range(0, 10):
-                            if last8[6] != '?':
+                            if last8[6] != '?':     # 自定义位:值强改
                                 gender = last8[6]
                             before17 = list(f"{begin}{year}{''.join(month)}{''.join(date)}{x}{y}{gender}")
-                            if type(divisor) == bool or gender % 2 == divisor:  # 条件更改除数分流男女
-                                if last8[7] == "?":     # 判断最后一位是否被自定义|没有被自定义
+                            if divisor == True or (gender % 2 == divisor):  # 条件更改除数分流男女
+                                if last8[7] == '?':     # 判断最后一位是否被自定义|没有被自定义
                                     for last in range(0, 11):  # 词条组合,并写入文件
                                         result = returnresult()     # 校验计算
                                         if fuckX(last) != check[result]:    # 校验验证
